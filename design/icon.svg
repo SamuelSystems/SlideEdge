@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="linear-gradient-1" x1="180" y1="120" x2="844" y2="904" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b6cff"/>
+      <stop offset="1" stop-color="#3b2cc9"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="232" y1="292" x2="792" y2="732" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="722" y1="340" x2="722" y2="684" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.28"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="722" y1="470" x2="722" y2="684" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <title>Untitled-1</title>
+  <g id="Layer_1" data-name="Layer 1">
+    <path d="M285 100 L739 100 C841.173 100 924 182.827 924 285 L924 739 C924 841.173 841.173 924 739 924 L285 924 C182.827 924 100 841.173 100 739 L100 285 C100 182.827 182.827 100 285 100 Z" fill="url(#linear-gradient-1)"/>
+    <path d="M296 292 L728 292 C763.346 292 792 320.654 792 356 L792 668 C792 703.346 763.346 732 728 732 L296 732 C260.654 732 232 703.346 232 668 L232 356 C232 320.654 260.654 292 296 292 Z" fill="url(#linear-gradient-2)" stroke="#ffffff" stroke-width="14" stroke-miterlimit="10"/>
+    <path d="M722 340 L722 340 C734.15 340 744 349.85 744 362 L744 662 C744 674.15 734.15 684 722 684 L722 684 C709.85 684 700 674.15 700 662 L700 362 C700 349.85 709.85 340 722 340 Z" fill="url(#linear-gradient-3)"/>
+    <path d="M722 470 L722 470 C734.15 470 744 479.85 744 492 L744 662 C744 674.15 734.15 684 722 684 L722 684 C709.85 684 700 674.15 700 662 L700 492 C700 479.85 709.85 470 722 470 Z" fill="url(#linear-gradient-4)"/>
+    <path d="M560 452 L610 402 L660 452 M560 572 L610 622 L660 572" fill="none" stroke="#ffffff" stroke-width="22" stroke-miterlimit="10"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+// Code signing for the SlideEdge target.
+//
+// Defaults to ad-hoc signing ("Sign to Run Locally") so anyone can build the project.
+// macOS ties the Accessibility and Input Monitoring permissions to the signature, and an
+// ad-hoc signature changes on every build: to keep the permissions, sign with your own team.
+// Copy Local.xcconfig.example to Local.xcconfig (ignored by git) and set your Team ID there.
+
+CODE_SIGN_IDENTITY = -
+DEVELOPMENT_TEAM =
+
+#include? "Local.xcconfig"
