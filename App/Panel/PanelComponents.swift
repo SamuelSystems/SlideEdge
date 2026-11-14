@@ -62,9 +62,34 @@ struct ToggleRow: View {
         PanelRow(symbol: symbol, highlighted: isOn, title: title, subtitle: subtitle) {
             Toggle(title, isOn: $isOn)
                 .labelsHidden()
-                .toggleStyle(.switch)
-                .tint(.edgeAccent)
-                .controlSize(.small)
+                .toggleStyle(AccentSwitchStyle())
+        }
+    }
+}
+
+/// Switch drawn in the SlideEdge accent: the system switch ignores `.tint` on recent macOS.
+struct AccentSwitchStyle: ToggleStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            configuration.isOn.toggle()
+        } label: {
+            Capsule()
+                .fill(configuration.isOn ? Color.edgeAccent : Color.primary.opacity(0.14))
+                .frame(width: 34, height: 20)
+                .overlay(alignment: configuration.isOn ? .trailing : .leading) {
+                    Circle()
+                        .fill(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 1, y: 0.5)
+                        .padding(2)
+                }
+                .animation(.easeOut(duration: 0.15), value: configuration.isOn)
+                .opacity(isEnabled ? 1 : 0.5)
+        }
+        .buttonStyle(.plain)
+        .accessibilityRepresentation {
+            Toggle(isOn: configuration.$isOn) { configuration.label }
         }
     }
 }

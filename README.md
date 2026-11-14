@@ -8,6 +8,14 @@
 
 <p align="center"><a href="README.it.md">Italiano</a></p>
 
+<p align="center">
+  <img src="docs/panel.png" width="300" alt="Menu bar panel">
+  <img src="docs/settings.png" width="300" alt="Settings">
+</p>
+<p align="center">
+  <img src="docs/hud.png" width="286" alt="On-screen level indicator">
+</p>
+
 ---
 
 SlideEdge is a small menu bar app. Slide a finger along an edge of the trackpad to change the
@@ -47,6 +55,8 @@ Swap the sides, limit each side to part of the edge, require Fn or ⌥, or switc
 
 macOS 13 Ventura or later, Apple Silicon or Intel. DDC/CI for third-party monitors works on Apple
 Silicon only.
+
+The interface is in Italian for now; translations are welcome (see Contributing).
 
 ## Install
 

@@ -8,6 +8,14 @@
 
 <p align="center"><a href="README.md">English</a></p>
 
+<p align="center">
+  <img src="docs/panel.png" width="300" alt="Pannello della barra dei menu">
+  <img src="docs/settings.png" width="300" alt="Impostazioni">
+</p>
+<p align="center">
+  <img src="docs/hud.png" width="286" alt="Indicatore di livello a schermo">
+</p>
+
 ---
 
 SlideEdge è una piccola app per la barra dei menu. Fai scorrere un dito lungo un bordo del trackpad

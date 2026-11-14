@@ -111,7 +111,21 @@ final class AppCoordinator: ObservableObject {
             .environmentObject(liveLevels)
             .environmentObject(loginItem)
             .background(.regularMaterial)
-        present(view, title: "SlideEdge Preview", in: &previewWindow)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .environment(\.controlActiveState, .key)
+
+        let hosting = NSHostingController(rootView: view)
+        hosting.sizingOptions = []
+        let window = PreviewWindow(contentViewController: hosting)
+        window.styleMask = [.borderless]
+        window.isOpaque = false
+        window.backgroundColor = .clear
+        window.hasShadow = true
+        window.title = "SlideEdge Preview"
+        window.setContentSize(hosting.view.fittingSize)
+        window.center()
+        window.orderFrontRegardless()
+        previewWindow = window
     }
     #endif
 
@@ -223,3 +237,10 @@ final class AppCoordinator: ObservableObject {
         window.makeKeyAndOrderFront(nil)
     }
 }
+
+#if DEBUG
+/// Always draws as the key window, so controls show their active (tinted) look in screenshots.
+private final class PreviewWindow: NSWindow {
+    override var isKeyWindow: Bool { true }
+}
+#endif

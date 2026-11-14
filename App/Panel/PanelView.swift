@@ -103,7 +103,7 @@ private struct MainPage: View {
                 ToggleRow(symbol: "speaker.slash.fill", title: "Muto rapido",
                           subtitle: "Doppio tap in alto a destra", isOn: $settings.quickMute)
                 ToggleRow(symbol: "forward.fill", title: "Media Strip",
-                          subtitle: "Swipe in basso per cambiare brano", isOn: $settings.mediaStrip)
+                          subtitle: "Swipe in basso: cambia brano", isOn: $settings.mediaStrip)
                 ToggleRow(symbol: "playpause.fill", title: "Tocca per Play/Pausa",
                           subtitle: "Doppio tap sul bordo inferiore", isOn: $settings.mediaTapPlayPause)
                     .disabled(!settings.mediaStrip)
