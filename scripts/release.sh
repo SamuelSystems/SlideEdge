@@ -3,11 +3,16 @@
 #
 #   ./scripts/release.sh                  # build with the version in the project
 #   ./scripts/release.sh --version 1.0    # set the version in the project, then build
+#   ./scripts/release.sh --adhoc          # ad-hoc signature, e.g. for public GitHub releases
 #
 # Build number: a timestamp (YYYYMMDDHHMM), so every release build is unique.
+# The binary is stripped: debug symbols stay in the .dSYM next to the build, so build paths
+# from this machine do not ship.
 #
-# Signing: the project's signing (Apple Development) unless a "Developer ID Application"
-# identity is in the keychain, in which case the app and the DMG are signed with it.
+# Signing: the project's signing (Config/Local.xcconfig, usually Apple Development) unless a
+# "Developer ID Application" identity is in the keychain, in which case the app and the DMG are
+# signed with it. --adhoc skips both: an Apple Development certificate carries the owner's
+# e-mail address, which then ships inside every downloaded copy.
 # Notarization: set NOTARY_PROFILE to a profile saved with
 #   xcrun notarytool store-credentials <name> --apple-id <id> --team-id <team>
 # and the DMG is notarized, then the ticket is stapled to the DMG and to the app.
@@ -18,6 +23,7 @@ PROJECT=SlideEdge.xcodeproj
 DIST=dist
 BUILD=build/Release
 APP_NAME=SlideEdge.app
+ADHOC=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -27,14 +33,20 @@ while [[ $# -gt 0 ]]; do
             echo "==> Version set to $2"
             shift 2
             ;;
+        --adhoc)
+            ADHOC=1
+            shift
+            ;;
         *)
-            echo "usage: $0 [--version X.Y[.Z]]" >&2
+            echo "usage: $0 [--version X.Y[.Z]] [--adhoc]" >&2
             exit 1
             ;;
     esac
 done
 
 BUILD_NUMBER=$(date +%Y%m%d%H%M)
+SIGNING_OVERRIDES=()
+(( ADHOC )) && SIGNING_OVERRIDES=(CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM=)
 
 echo "==> Tests"
 swift test --package-path Packages/SlideEdgeKit 2>&1 | grep -E "Test run with|✘|error:" || true
@@ -51,6 +63,8 @@ xcodebuild -quiet \
     -derivedDataPath "$BUILD" \
     -destination 'generic/platform=macOS' \
     CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
+    DEPLOYMENT_POSTPROCESSING=YES STRIP_INSTALLED_PRODUCT=YES STRIP_STYLE=non-global \
+    "${SIGNING_OVERRIDES[@]}" \
     build 2>&1 | grep -v -e appintentsmetadataprocessor -e IDERunDestination || true
 [[ -d "$BUILD/Build/Products/Release/$APP_NAME" ]] || { echo "error: build failed" >&2; exit 1; }
 
@@ -58,7 +72,10 @@ ditto "$BUILD/Build/Products/Release/$APP_NAME" "$DIST/$APP_NAME"
 APP="$DIST/$APP_NAME"
 VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist")
 
-DEVELOPER_ID=$(security find-identity -v -p codesigning | grep -o '"Developer ID Application[^"]*"' | head -1 | tr -d '"' || true)
+DEVELOPER_ID=""
+if (( ! ADHOC )); then
+    DEVELOPER_ID=$(security find-identity -v -p codesigning | grep -o '"Developer ID Application[^"]*"' | head -1 | tr -d '"' || true)
+fi
 if [[ -n "$DEVELOPER_ID" ]]; then
     echo "==> Sign with $DEVELOPER_ID"
     codesign --force --options runtime --timestamp --sign "$DEVELOPER_ID" "$APP"
@@ -86,7 +103,8 @@ ditto -c -k --keepParent "$APP" "$DIST/SlideEdge-$VERSION.zip"
 
 echo "==> SlideEdge $VERSION ($BUILD_NUMBER)"
 echo "    archs: $(lipo -archs "$APP/Contents/MacOS/SlideEdge")"
-echo "    signed by: $(codesign -dv --verbose=2 "$APP" 2>&1 | grep '^Authority=' | head -1 | cut -d= -f2)"
+SIGNER=$(codesign -dv --verbose=2 "$APP" 2>&1 | grep '^Authority=' | head -1 | cut -d= -f2 || true)
+echo "    signed by: ${SIGNER:-ad-hoc}"
 if spctl --assess --type execute "$APP" 2>/dev/null; then
     echo "    Gatekeeper: accepted"
 else
